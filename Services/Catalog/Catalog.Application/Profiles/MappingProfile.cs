@@ -4,6 +4,7 @@ using Catalog.Application.Features.Products.Commands.CreateProduct;
 using Catalog.Application.Features.Products.Queries.GetProducts;
 using Catalog.Application.Features.Types.Queries.GetTypes;
 using Catalog.Core.Entities;
+using Catalog.Core.Helper;
 
 namespace Catalog.Application.Profiles
 {
@@ -14,6 +15,7 @@ namespace Catalog.Application.Profiles
             CreateMap<ProductBrand, BrandResponse>().ReverseMap();
             CreateMap<Product, ProductResponse>().ReverseMap();
             CreateMap<ProductType, TypeResponse>().ReverseMap();
+            CreateMap<Pagination<Product>, Pagination<ProductResponse>>().ReverseMap();
 
             CreateMap<CreateProductCommand, Product>().ReverseMap();
 

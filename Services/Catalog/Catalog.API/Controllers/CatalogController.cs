@@ -6,7 +6,10 @@ using Catalog.Application.Features.Products.Queries.GetProductById;
 using Catalog.Application.Features.Products.Queries.GetProductByName;
 using Catalog.Application.Features.Products.Queries.GetProducts;
 using Catalog.Application.Features.Products.Queries.GetProductsByBrand;
+using Catalog.Application.Features.Products.Queries.GetProductsPaginated;
 using Catalog.Application.Features.Types.Queries.GetTypes;
+using Catalog.Core.Helper;
+using Catalog.Core.Specifications;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -46,6 +49,22 @@ namespace Catalog.API.Controllers
             var query = new GetProductByNameQuery(name)
             {
                 Name = name // Set required member explictly
+            };
+
+            var products = await _mediator.Send(query);
+
+            return Ok(products);
+        }
+
+        [HttpGet]
+        [Route("GetProductsPaginated")]
+        [ProducesResponseType(typeof(Pagination<ProductResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Pagination<ProductResponse>>> GetProductsPaginated([FromQuery] CatalogSpecParams catalogSpecParams)
+        {
+            var query = new GetProductsPaginatedQuery(catalogSpecParams)
+            {
+                CatalogSpecParams = catalogSpecParams // Set required member explictly
             };
 
             var products = await _mediator.Send(query);
