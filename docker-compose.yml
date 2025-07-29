@@ -7,6 +7,17 @@ services:
     build:
       context: .
       dockerfile: Services/Catalog/Catalog.API/Dockerfile
+  
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=catalogdb
+      - ME_CONFIG_MONGODB_PORT=27017
+    depends_on:
+      - catalogdb
 
 volumes:
   mongo_data:
