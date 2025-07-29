@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Catalog.Application;
 using Catalog.Core.Repositories;
 using Catalog.Infrastructure.Data;
@@ -14,8 +15,20 @@ builder.Services.AddApplicationServices();
 
 builder.Services.AddControllers();
 
+builder.Services.AddApiVersioning(options =>
+{
+    // Specify the default API version
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+
+    // Advertise the API versions supported by this API
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.ReportApiVersions = true;
+});
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+////builder.Services.AddOpenApi();
+
+builder.Services.AddEndpointsApiExplorer();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddSwaggerGen(options =>
@@ -52,16 +65,26 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    ////app.MapOpenApi();
 
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
-        // Set Swagger UI at the app's root
+        // Set Swagger UI at the app's root - http://localhost:8000/index.html
         // Sample:
         // If "launchBrowser": false in launchSettings.json then manually enter http://localhost:5073 to see the Swagger UI
         // If "launchBrowser": true in launchSettings.json then it will automatically open the browser to the URL http://localhost:5073/index.html
         options.RoutePrefix = string.Empty;
+
+        // Set the Swagger JSON endpoint: http://localhost:8000/swagger/v1/swagger.json
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Catalog.Api v1");
+
+        // Serve Swagger UI at /swagger: http://localhost:8000/swagger/index.html
+        ////options.RoutePrefix = "swagger";
+
+        // IMPORTANT
+        // If the change is not reflected try hard refreshing the browser or clearing the browser cache. Ctrl + F5 or Ctrl + Shift + R
     });
 }
 
@@ -73,7 +96,7 @@ try
 {
     using (var scope = app.Services.CreateScope())
     {
-        var catalogContext = scope.ServiceProvider.GetRequiredService<CatalogContext>();
+        var catalogContext = scope.ServiceProvider.GetRequiredService<ICatalogContext>();
 
         await BrandContextSeed.SeedDataAsync(catalogContext.Brands);
         await TypeContextSeed.SeedDataAsync(catalogContext.Types);
@@ -82,7 +105,7 @@ try
 }
 catch (Exception ex)
 {
-    Console.WriteLine("An error occurred while seeding the database: {message}", ex.Message);
+    ////Console.WriteLine($"An error occurred while seeding the database: {ex.Message}");
     throw;
 }
 
