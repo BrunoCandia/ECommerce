@@ -19,5 +19,18 @@ services:
     depends_on:
       - catalogdb
 
+  basketdb:
+    image: redis:latest
+
+  basket.api:
+    image: ${DOCKER_REGISTRY-}basketapi
+    build:
+      context: .
+      dockerfile: Services/Basket/Basket.API/Dockerfile
+
+  portainer:
+     image: portainer/portainer-ce
+
 volumes:
   mongo_data:
+  portainer_data:

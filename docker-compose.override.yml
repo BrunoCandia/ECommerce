@@ -28,3 +28,31 @@ services:
       - ME_CONFIG_MONGODB_PORT=27017
     depends_on:
       - catalogdb
+
+  basketdb:
+    container_name: basketdb    
+    restart: always
+    ports:
+      - "6379:6379"
+
+  basket.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - "ConnectionStrings__Redis=basketdb:6379"
+    depends_on:
+      - basketdb
+    ports:
+      - "8001:8080"
+ 
+  portainer:    
+    container_name: portainer
+    restart: always
+    ports:
+      - "8080:8000"
+      - "9090:9000"
+    volumes:
+      - portainer_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+
+
