@@ -40,6 +40,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - "ConnectionStrings__Redis=basketdb:6379"
+      - "GrpcSettings__DiscountUrl=http://discount.api:8080" 
     depends_on:
       - basketdb
     ports:

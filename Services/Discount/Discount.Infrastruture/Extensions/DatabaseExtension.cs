@@ -56,16 +56,15 @@ namespace Discount.Infrastruture.Extensions
                     command.ExecuteNonQuery();
 
                     command.CommandText = @"CREATE TABLE Coupon(Id SERIAL PRIMARY KEY, 
-                                                                ProductName VARCHAR(24) NOT NULL,
+                                                                ProductName VARCHAR(500) NOT NULL,
                                                                 Description TEXT,
                                                                 AmountOff DECIMAL(10, 2))";
                     command.ExecuteNonQuery();
 
-
-                    command.CommandText = "INSERT INTO Coupon(ProductName, Description, AmountOff) VALUES('IPhone X', 'IPhone Discount', 150);";
+                    command.CommandText = "INSERT INTO Coupon(ProductName, Description, AmountOff) VALUES('Adidas Quick Force Indoor Badminton Shoes', 'Shoe Discount', 500);";
                     command.ExecuteNonQuery();
 
-                    command.CommandText = "INSERT INTO Coupon(ProductName, Description, AmountOff) VALUES('Samsung 10', 'Samsung Discount', 100);";
+                    command.CommandText = "INSERT INTO Coupon(ProductName, Description, AmountOff) VALUES('Yonex VCORE Pro 100 A Tennis Racquet (270gm, Strung)', 'Racquet Discount', 700);";
                     command.ExecuteNonQuery();
 
                     break; // Success, exit loop

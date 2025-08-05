@@ -7,3 +7,11 @@ http://localhost:8081
 This basic security is part of the image, probably.
 user: admin
 password: pass
+
+pgAdmin
+admin@eCommerce.net
+Password@1
+
+Portainer
+admin
+Password@123

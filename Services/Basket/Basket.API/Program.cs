@@ -1,7 +1,9 @@
 using Asp.Versioning;
 using Basket.Application;
+using Basket.Application.GrpcServices;
 using Basket.Core.Repositories;
 using Basket.Infrastructure.Repositories;
+using Discount.Grpc.Protos;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -58,6 +60,20 @@ builder.Services.AddStackExchangeRedisCache(options =>
 });
 
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+
+builder.Services.AddScoped<DiscountGrpcService>();
+
+builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(configureClient =>
+{
+    var discountUrl = builder.Configuration["GrpcSettings:DiscountUrl"];
+
+    if (string.IsNullOrWhiteSpace(discountUrl))
+    {
+        throw new InvalidOperationException("GrpcSettings:DiscountUrl configuration value is missing or empty.");
+    }
+
+    configureClient.Address = new Uri(discountUrl);
+});
 
 var app = builder.Build();
 
