@@ -4,9 +4,9 @@
       "commandName": "Project",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "dotnetRunMessages": true,
-      "applicationUrl": "http://localhost:8002"
+      },      
+      "applicationUrl": "http://localhost:8002",
+      "dotnetRunMessages": true
     },
     "Container (Dockerfile)": {
       "commandName": "Docker",

@@ -8,6 +8,11 @@ This basic security is part of the image, probably.
 user: admin
 password: pass
 
+SQL Server
+Database=OrderDb
+User Id=sa
+Password=Password@1
+
 pgAdmin
 admin@eCommerce.net
 Password@1

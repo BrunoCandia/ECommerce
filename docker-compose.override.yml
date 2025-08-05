@@ -68,6 +68,27 @@ services:
     ports:
       - "8002:8080"
  
+  orderdb:
+    container_name: orderdb
+    environment:
+      SA_PASSWORD: "Password@1"
+      ACCEPT_EULA: "Y"
+    restart: always
+    ports:
+      - "1433:1433"
+    volumes:
+      - order_data:/var/opt/mssql
+
+  order.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - "ConnectionStrings__OrderConnectionString=Server=orderdb;Database=OrderDb;User Id=sa;Password=Password@1;TrustServerCertificate=True" 
+    depends_on:
+      - orderdb
+    ports:
+      - "8003:8080"
+
   pgadmin:
     container_name: pgadmin
     environment:
@@ -87,6 +108,5 @@ services:
       - "9090:9000"
     volumes:
       - portainer_data:/data
-      - /var/run/docker.sock:/var/run/docker.sock
-  
+      - /var/run/docker.sock:/var/run/docker.sock  
 
