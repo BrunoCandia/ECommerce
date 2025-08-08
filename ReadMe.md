@@ -20,3 +20,9 @@ Password@1
 Portainer
 admin
 Password@123
+
+### Entity Framework Core
+
+## Create Migration
+
+add-migration Initial-Migration -StartupProject Order.API -Project Order.Infrastructure
