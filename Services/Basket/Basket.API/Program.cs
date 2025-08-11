@@ -1,9 +1,12 @@
 using Asp.Versioning;
 using Basket.Application;
 using Basket.Application.GrpcServices;
+using Basket.Application.Messages;
 using Basket.Core.Repositories;
+using Basket.Infrastructure.Messages;
 using Basket.Infrastructure.Repositories;
 using Discount.Grpc.Protos;
+using MassTransit;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +15,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Register layer services
 builder.Services.AddApplicationServices();
+
+builder.Services.AddScoped<IBasketEventBusPublisher, BasketEventBusPublisher>();
 
 builder.Services.AddControllers();
 
@@ -74,6 +79,17 @@ builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(
 
     configureClient.Address = new Uri(discountUrl);
 });
+
+// Register MassTransit and RabbitMQ
+builder.Services.AddMassTransit(config =>
+{
+    config.UsingRabbitMq((ct, cfg) =>
+    {
+        cfg.Host(builder.Configuration["EventBusSettings:HostAddress"]);
+    });
+});
+
+////builder.Services.AddMassTransitHostedService();
 
 var app = builder.Build();
 

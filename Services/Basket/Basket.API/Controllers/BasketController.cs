@@ -1,6 +1,8 @@
-﻿using Basket.Application.Features.ShoppingCart.Commands.CreateShoppingCart;
+﻿using Basket.Application.Features.ShoppingCart.Commands.CheckoutBasket;
+using Basket.Application.Features.ShoppingCart.Commands.CreateShoppingCart;
 using Basket.Application.Features.ShoppingCart.Commands.DeleteBasketByUserName;
 using Basket.Application.Features.ShoppingCart.Queries.GetBasketByUserName;
+using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +11,14 @@ namespace Basket.API.Controllers
     public class BasketController : BaseApiController
     {
         private readonly IMediator _mediator;
+        private readonly IPublishEndpoint _publishEndpoint;
+        private readonly ILogger<BasketController> _logger;
 
-        public BasketController(IMediator mediator)
+        public BasketController(IMediator mediator, IPublishEndpoint publishEndpoint, ILogger<BasketController> logger)
         {
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            _publishEndpoint = publishEndpoint ?? throw new ArgumentNullException(nameof(publishEndpoint));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [HttpGet]
@@ -74,6 +80,35 @@ namespace Basket.API.Controllers
             await _mediator.Send(command);
 
             return Ok();
+        }
+
+        [Route("[action]")]
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status202Accepted)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CheckoutBasket([FromBody] CheckoutBasketCommand checkoutBasketCommand)
+        {
+            await _mediator.Send(checkoutBasketCommand);
+
+            return Accepted();
+
+            //////Get the existing basket with username
+            ////var query = new GetBasketByUserNameQuery(basketCheckout.UserName);
+            ////var basket = await _mediator.Send(query);
+            ////if (basket == null)
+            ////{
+            ////    return BadRequest();
+            ////}
+
+            ////var eventMsg = BasketMapper.Mapper.Map<BasketCheckoutEvent>(basketCheckout);
+            ////eventMsg.TotalPrice = basket.TotalPrice;
+            ////await _publishEndpoint.Publish(eventMsg);
+            ////_logger.LogInformation($"Basket Published for {basket.UserName}");
+
+            //////Remove the basket
+            ////var deleteCmd = new DeleteBasketByUserNameCommand(basketCheckout.UserName);
+            ////await _mediator.Send(deleteCmd);
+            ////return Accepted();
         }
     }
 }

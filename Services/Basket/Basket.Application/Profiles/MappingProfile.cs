@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Basket.Application.Features.ShoppingCart.Commands.CheckoutBasket;
 using Basket.Application.Features.ShoppingCart.Commands.CreateShoppingCart;
 using Basket.Application.Features.ShoppingCart.Queries.GetBasketByUserName;
 using Basket.Core.Entities;
+using EventBus.Messages.Events;
 
 namespace Basket.Application.Profiles
 {
@@ -11,6 +13,9 @@ namespace Basket.Application.Profiles
         {
             CreateMap<ShoppingCart, ShoppingCartResponse>().ReverseMap();
             CreateMap<ShoppingCartItem, ShoppingCartItemResponse>().ReverseMap();
+
+            ////CreateMap<BasketCheckout, BasketCheckoutEvent>().ReverseMap();
+            CreateMap<BasketCheckoutEvent, CheckoutBasketCommand>().ReverseMap();
 
             CreateMap<CreateShoppingCartCommand, ShoppingCart>()
                 .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items))
