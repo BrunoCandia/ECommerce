@@ -1,12 +1,14 @@
-﻿using Basket.Application.Features.ShoppingCart.Commands.CheckoutBasket;
+﻿using Asp.Versioning;
+using Basket.Application.Features.ShoppingCart.Commands.CheckoutBasket;
 using Basket.Application.Features.ShoppingCart.Commands.CreateShoppingCart;
 using Basket.Application.Features.ShoppingCart.Commands.DeleteBasketByUserName;
 using Basket.Application.Features.ShoppingCart.Queries.GetBasketByUserName;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Basket.API.Controllers
+namespace Basket.API.Controllers.V1
 {
+    [ApiVersion("1")]
     public class BasketController : BaseApiController
     {
         private readonly IMediator _mediator;

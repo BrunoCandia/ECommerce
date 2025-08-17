@@ -10,6 +10,8 @@ using Discount.Grpc.Protos;
 using MassTransit;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +35,11 @@ builder.Services.AddApiVersioning(options =>
     // Advertise the API versions supported by this API
     options.AssumeDefaultVersionWhenUnspecified = true;
     options.ReportApiVersions = true;
+})
+.AddApiExplorer(options =>
+{
+    options.GroupNameFormat = "'v'VVV";
+    options.SubstituteApiVersionInUrl = true;
 });
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -59,6 +66,49 @@ builder.Services.AddSwaggerGen(options =>
             Name = "Example License",
             Url = new Uri("https://example.com/license")
         }
+    });
+
+    options.SwaggerDoc("v2", new OpenApiInfo
+    {
+        Version = "v2",
+        Title = "Basket.Api",
+        Description = "An ASP.NET Core Web API for managing Basket items",
+        TermsOfService = new Uri("https://example.com/terms"),
+        Contact = new OpenApiContact
+        {
+            Name = "Example Contact",
+            Url = new Uri("https://example.com/contact")
+        },
+        License = new OpenApiLicense
+        {
+            Name = "Example License",
+            Url = new Uri("https://example.com/license")
+        }
+    });
+
+    // Include XML comments if you have them
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
+    if (File.Exists(xmlPath))
+    {
+        options.IncludeXmlComments(xmlPath);
+    }
+
+    // Configure Swagger to use the versioning
+    options.DocInclusionPredicate((version, apiDescription) =>
+    {
+        if (!apiDescription.TryGetMethodInfo(out var methodInfo))
+        {
+            return false;
+        }
+
+        var versions = methodInfo.DeclaringType?
+            .GetCustomAttributes(true)
+            .OfType<ApiVersionAttribute>()
+            .SelectMany(attr => attr.Versions);
+
+        return versions?.Any(v => $"v{v.ToString()}" == version) ?? false;
     });
 });
 
@@ -112,6 +162,7 @@ if (app.Environment.IsDevelopment())
 
         // Set the Swagger JSON endpoint: http://localhost:8001/swagger/v1/swagger.json
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "Basket.Api v1");
+        options.SwaggerEndpoint("/swagger/v2/swagger.json", "Basket.API v2");
 
         // Serve Swagger UI at /swagger: http://localhost:8001/swagger/index.html
         ////options.RoutePrefix = "swagger";
