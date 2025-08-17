@@ -5,13 +5,18 @@ using Basket.Application.Messages;
 using Basket.Core.Repositories;
 using Basket.Infrastructure.Messages;
 using Basket.Infrastructure.Repositories;
+using Common.Logging;
 using Discount.Grpc.Protos;
 using MassTransit;
 using Microsoft.OpenApi.Models;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+// Serilog configuration
+builder.Host.UseSerilog(Logging.ConfigureLogger);
 
 // Register layer services
 builder.Services.AddApplicationServices();

@@ -18,10 +18,12 @@ namespace Catalog.API.Controllers
     public class CatalogController : BaseApiController
     {
         private readonly IMediator _mediator;
+        private readonly ILogger<CatalogController> _logger;
 
-        public CatalogController(IMediator mediator)
+        public CatalogController(IMediator mediator, ILogger<CatalogController> logger)
         {
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [HttpGet]
@@ -52,6 +54,8 @@ namespace Catalog.API.Controllers
             };
 
             var products = await _mediator.Send(query);
+
+            _logger.LogInformation("Retrieved products by name: {Name}", name);
 
             return Ok(products);
         }

@@ -3,6 +3,7 @@ using Basket.Application.Messages;
 using Basket.Core.Repositories;
 using EventBus.Messages.Events;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Basket.Application.Features.ShoppingCart.Commands.CheckoutBasket
 {
@@ -11,12 +12,14 @@ namespace Basket.Application.Features.ShoppingCart.Commands.CheckoutBasket
         private readonly IBasketRepository _basketRepository;
         private readonly IBasketEventBusPublisher _basketEventPublisher;
         private readonly IMapper _mapper;
+        private readonly ILogger<CheckoutBasketCommandHandler> _logger;
 
-        public CheckoutBasketCommandHandler(IBasketRepository basketRepository, IBasketEventBusPublisher basketEventPublisher, IMapper mapper)
+        public CheckoutBasketCommandHandler(IBasketRepository basketRepository, IBasketEventBusPublisher basketEventPublisher, IMapper mapper, ILogger<CheckoutBasketCommandHandler> logger)
         {
-            _basketRepository = basketRepository;
-            _basketEventPublisher = basketEventPublisher;
-            _mapper = mapper;
+            _basketRepository = basketRepository ?? throw new ArgumentNullException(nameof(basketRepository));
+            _basketEventPublisher = basketEventPublisher ?? throw new ArgumentNullException(nameof(basketEventPublisher));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<Unit> Handle(CheckoutBasketCommand checkoutBasketCommand, CancellationToken cancellationToken)
@@ -49,11 +52,15 @@ namespace Basket.Application.Features.ShoppingCart.Commands.CheckoutBasket
 
             await _basketEventPublisher.PublishBasketCheckoutAsync(eventMsg);
 
+            _logger.LogInformation("Basket checkout for user {UserName} is successful. Basket will be deleted after processing.", checkoutBasketCommand.UserName);
+
             // TODO: Handle if the message was sent successfully but failed to process in the consumer(Order) due to validations
             // and the basket was deleted.
 
             // Delete the basket
             await _basketRepository.DeleteBasketAsync(checkoutBasketCommand.UserName);
+
+            _logger.LogInformation("Basket for user {UserName} has been deleted after checkout.", checkoutBasketCommand.UserName);
 
             return Unit.Value;
         }
