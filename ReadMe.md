@@ -42,6 +42,8 @@ add-migration Initial-Migration -StartupProject Order.API -Project Order.Infrast
 - User: sa
 - Password: Password@1
 
+https://github.com/rahulsahay19/dot-net-core-microservices-8
+
 ### Testing basket checkout flow
 
 http://localhost:8001/api/v1/Basket/CheckoutBasket
@@ -61,3 +63,20 @@ http://localhost:8001/api/v1/Basket/CheckoutBasket
   "cvv": "123",
   "paymentMethod": 1
 }
+
+## Angular 20
+
+### Files naming for components and services
+
+In the file angular.json add the type entry into schematics. Example when using the command from the Client folder
+"ng generate component layout/header --dry-run" the output will be "src/app/layout/header/header.component.ts" instead of "src/app/layout/header/header.ts"
+
+"schematics": {
+  "@schematics/angular:component": {
+    "style": "scss",
+    "type": "component"
+  },
+  "@schematics/angular:service": {
+    "type": "service"
+  }
+},
