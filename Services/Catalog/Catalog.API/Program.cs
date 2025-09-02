@@ -3,12 +3,17 @@ using Catalog.Application;
 using Catalog.Core.Repositories;
 using Catalog.Infrastructure.Data;
 using Catalog.Infrastructure.Repositories;
+using Common.Logging;
 using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+// Serilog configuration
+builder.Host.UseSerilog(Logging.ConfigureLogger);
 
 // Register layer services
 builder.Services.AddApplicationServices();

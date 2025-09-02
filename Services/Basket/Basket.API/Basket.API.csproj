@@ -11,6 +11,7 @@
 
   <ItemGroup>
 	<PackageReference Include="Asp.Versioning.Mvc" Version="8.1.0" />
+	<PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
 	<PackageReference Include="MassTransit" Version="8.5.2" />
 	<!--<PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />-->
 	<PackageReference Include="MassTransit.RabbitMQ" Version="8.5.2" />
@@ -20,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Infrastructure\Common.Logging\Common.Logging.csproj" />
     <ProjectReference Include="..\Basket.Application\Basket.Application.csproj" />
     <ProjectReference Include="..\Basket.Infrastructure\Basket.Infrastructure.csproj" />
   </ItemGroup>
