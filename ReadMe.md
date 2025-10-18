@@ -68,7 +68,7 @@ http://localhost:8001/api/v1/Basket/CheckoutBasket
 
 ### Run Frontend
 
-"ng start"
+"ng serve" or "npm start"
 
 ### Files naming for components and services
 
