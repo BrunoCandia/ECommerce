@@ -20,5 +20,31 @@
         public string? Sort { get; set; }
 
         public string? Search { get; set; }
+
+        #region Filtering
+        private List<string> _brands = new List<string>();
+
+        public List<string> Brands
+        {
+            get => _brands; // query string => /api/products?brands=Angular,React&types=Boots,Gloves
+            set
+            {
+                _brands = value.SelectMany(x => x.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                               .ToList();
+            }
+        }
+
+        private List<string> _types = new List<string>();
+
+        public List<string> Types
+        {
+            get => _types; // query string => /api/products?brands=Angular,React&types=Boots,Gloves
+            set
+            {
+                _types = value.SelectMany(x => x.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                               .ToList();
+            }
+        }
+        #endregion
     }
 }

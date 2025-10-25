@@ -70,6 +70,16 @@ namespace Catalog.Infrastructure.Repositories
                 filter = filter & Builders<Product>.Filter.Where(p => p.Types != null && p.Types.Id == catalogSpecParams.TypeId);
             }
 
+            if (catalogSpecParams.Brands is { Count: > 0 })
+            {
+                filter = filter & Builders<Product>.Filter.Where(p => p.Brands != null && catalogSpecParams.Brands.Contains(p.Brands.Id));
+            }
+
+            if (catalogSpecParams.Types is { Count: > 0 })
+            {
+                filter = filter & Builders<Product>.Filter.Where(p => p.Types != null && catalogSpecParams.Types.Contains(p.Types.Id));
+            }
+
             var totalCount = (int)await _catalogContext.Products.CountDocumentsAsync(filter);
 
             var sortDefinition = Builders<Product>.Sort.Ascending(p => p.Name);
