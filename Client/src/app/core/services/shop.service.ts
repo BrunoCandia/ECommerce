@@ -5,14 +5,17 @@ import { Pagination } from '../../shared/models/pagination';
 import { Product } from '../../shared/models/product';
 import { Type } from '../../shared/models/type';
 import { Brand } from '../../shared/models/brand';
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShopService {
   
-  //baseUrl = 'http://localhost:8000/' //environment.apiUrl;
-  baseUrl = 'http://localhost:8000/api/v1/';
+  // baseUrl = 'http://localhost:8000/';
+  // baseUrl = 'http://localhost:8000/api/v1/';
+  baseUrl = environment.apiUrl;
+
   params = new HttpParams();
   
   constructor(private httpClient: HttpClient) { }

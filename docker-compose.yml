@@ -63,6 +63,12 @@ services:
     depends_on:
       - elasticsearch
 
+  ocelot.apigateway:
+    image: ${DOCKER_REGISTRY-}ocelotapigateway
+    build:
+      context: .
+      dockerfile: Gateways/Ocelot.ApiGateway/Dockerfile
+
 volumes:
   mongo_data:
   postgres_data:
@@ -70,4 +76,3 @@ volumes:
   portainer_data:
   pgadmin_data:
   elasticsearch_data:
-
