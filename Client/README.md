@@ -62,6 +62,14 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
 
+## ECommerce App Secret in Azure
+
+Value:
+fna8Q~Wd8uctXf3W2QYnWo87sObLeIJKeMXPgdmz
+
+SecretID:
+b58d5a7b-f836-41cd-8028-da56be802e5d
+
 ## TODO
 
 Add Shopping Cart
