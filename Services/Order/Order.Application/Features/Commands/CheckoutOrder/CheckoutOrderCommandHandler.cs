@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Order.Application.Constants;
 using Order.Core.Repositories;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Order.Application.Features.Commands.CheckoutOrder
 {
@@ -23,6 +26,41 @@ namespace Order.Application.Features.Commands.CheckoutOrder
             var orderEntity = _mapper.Map<Core.Entities.Order>(request);
 
             var generatedOrder = await _orderRepository.AddAsync(orderEntity);
+
+            var jsonOptions = new JsonSerializerOptions
+            {
+                Converters =
+                {
+                    new JsonStringEnumConverter()
+                }
+            };
+
+            var outboxMessage = new Core.Entities.OutboxMessage
+            {
+                CorrelationId = request.CorrelationId,
+                Type = OutboxMessageType.OrderCheckouted,
+                OccuredOnUtcNow = DateTimeOffset.UtcNow,
+                Content = JsonSerializer.Serialize(new
+                {
+                    generatedOrder.Id,
+                    generatedOrder.UserName,
+                    generatedOrder.TotalPrice,
+                    generatedOrder.FirstName,
+                    generatedOrder.LastName,
+                    generatedOrder.AddressLine,
+                    generatedOrder.Country,
+                    generatedOrder.State,
+                    generatedOrder.ZipCode,
+                    generatedOrder.CardName,
+                    generatedOrder.CardNumber,
+                    generatedOrder.Expiration,
+                    generatedOrder.Cvv,
+                    generatedOrder.PaymentMethod,
+                    generatedOrder.Status
+                }, jsonOptions)
+            };
+
+            await _orderRepository.AddOutboxMessageAsync(outboxMessage);
 
             _logger.LogInformation("Order with Id {Id} successfully created", generatedOrder.Id);
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Order.Core.Entities;
 using Order.Core.Repositories;
 using Order.Infrastructure.Data;
 
@@ -17,6 +18,12 @@ namespace Order.Infrastructure.Repositories
                     .ToListAsync();
 
             return orderList;
+        }
+
+        public async Task AddOutboxMessageAsync(OutboxMessage outboxMessage)
+        {
+            await _orderContext.OutboxMessages.AddAsync(outboxMessage);
+            await _orderContext.SaveChangesAsync();
         }
     }
 }

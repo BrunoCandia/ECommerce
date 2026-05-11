@@ -10,6 +10,7 @@ namespace Order.Infrastructure.Data
         }
 
         public DbSet<Core.Entities.Order> Orders { get; set; }
+        public DbSet<Core.Entities.OutboxMessage> OutboxMessages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,6 +38,20 @@ namespace Order.Infrastructure.Data
                 entity.Property(e => e.CardNumber).HasMaxLength(20);
                 entity.Property(e => e.Expiration).HasMaxLength(10);
                 entity.Property(e => e.Cvv).HasMaxLength(5);
+                entity.Property(e => e.Status).HasConversion<string>();
+            });
+
+            modelBuilder.Entity<Core.Entities.OutboxMessage>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
+                entity.Property(e => e.CreatedBy).HasMaxLength(100);
+                entity.Property(e => e.LastModifiedBy).HasMaxLength(100);
+
+                entity.HasIndex(e => e.CorrelationId);
+                entity.Property(e => e.Type).IsRequired().HasMaxLength(200);
+                entity.Property(e => e.Content).IsRequired().HasMaxLength(6000);
+                entity.Property(e => e.OccuredOnUtcNow).IsRequired();
             });
         }
 

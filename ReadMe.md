@@ -36,6 +36,10 @@ pass: Password@123
 
 add-migration Initial-Migration -StartupProject Order.API -Project Order.Infrastructure
 
+## Apply db migration
+
+Run the application to apply migrations to the database. The logic is in the Program.cs file
+
 ### Connecting to SQL Server running in a docker container from local machine using SQL Server Management Studio (SSMS)
 
 - Server: localhost,1433
@@ -44,12 +48,26 @@ add-migration Initial-Migration -StartupProject Order.API -Project Order.Infrast
 
 https://github.com/rahulsahay19/dot-net-core-microservices-8
 
-### Testing basket checkout flow
+### Testing basket flow
+
+http://localhost:8001/api/v1/Basket/CreateBasket
+{
+  "userName": "bruno.candia",
+  "items": [
+    {
+      "productId": "998d2149e773f2a3990b47fa",
+      "productName": "Adidas FIFA World Cup Top Glider Ball",
+      "productImage": "adidas_football-3.png",
+      "price": 2499,
+      "quantity": 2
+    }
+  ]
+}
 
 http://localhost:8001/api/v1/Basket/CheckoutBasket
 {
-  "userName": "bruno",
-  "totalPrice": 6000,
+  "userName": "bruno.candia",
+  "totalPrice": 4998,
   "firstName": "bruno",
   "lastName": "candia",
   "emailAddress": "bruno@ecommerce.net",
@@ -63,6 +81,10 @@ http://localhost:8001/api/v1/Basket/CheckoutBasket
   "cvv": "123",
   "paymentMethod": 1
 }
+
+### Verify the Order
+
+http://localhost:8003/api/v1/Order/GetOrderByUserName/bruno.candia
 
 ## Angular 20
 
@@ -113,8 +135,8 @@ You keep authoring only the two existing files; do not edit the generated one.
 
 3. Profiles / Run Modes  
 In the debug dropdown you will see:  
-- Individual project (e.g., Catalog.API) – runs a single container (Dockerfile).  
-- docker-compose – runs everything defined. Pick docker-compose to spin up all infra plus APIs (Mongo, Redis, Postgres, SQL Server, RabbitMQ, Elasticsearch, etc.).
+- Individual project (e.g., Catalog.API) ï¿½ runs a single container (Dockerfile).  
+- docker-compose ï¿½ runs everything defined. Pick docker-compose to spin up all infra plus APIs (Mongo, Redis, Postgres, SQL Server, RabbitMQ, Elasticsearch, etc.).
 
 4. Debugging  
 - Press F5 on docker-compose project > containers build (if needed) > start.  
@@ -156,7 +178,7 @@ Same files used by VS.
 Generated merged file under docker-compose/obj (read-only for troubleshooting).
 
 12. Attaching to Already Running Containers  
-Debug > Attach to Process… > Connection Type: Docker > select container (dotnet process).
+Debug > Attach to Processï¿½ > Connection Type: Docker > select container (dotnet process).
 
 13. Rebuilding Individual Service  
 Containers tool window: right-click service > Rebuild / Restart.

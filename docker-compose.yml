@@ -32,7 +32,7 @@ services:
       dockerfile: Services/Basket/Basket.API/Dockerfile  
 
   discountdb:
-    image: postgres
+    image: postgres:17
       
   discount.api:
     image: ${DOCKER_REGISTRY-}discountapi

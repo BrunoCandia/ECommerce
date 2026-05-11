@@ -7,6 +7,7 @@ using Order.API.EventBusConsumer;
 using Order.Application;
 using Order.Infrastructure;
 using Order.Infrastructure.Data;
+using Order.Infrastructure.Dispatcher;
 using Order.Infrastructure.Extensions;
 using Serilog;
 
@@ -62,6 +63,9 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
+
+// Register OutboxMessageDispatcher as a hosted service
+builder.Services.AddHostedService<OutboxMessageDispatcher>();
 
 // Register MassTransit and RabbitMQ
 builder.Services.AddMassTransit(config =>

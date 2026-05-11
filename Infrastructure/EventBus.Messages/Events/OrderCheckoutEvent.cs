@@ -1,9 +1,8 @@
-﻿using MediatR;
-
-namespace Order.Application.Features.Commands.CheckoutOrder
+﻿namespace EventBus.Messages.Events
 {
-    public class CheckoutOrderCommand : IRequest<Guid>
+    public class OrderCheckoutEvent : BaseIntegrationEvent
     {
+        public Guid Id { get; set; }
         public string? UserName { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
@@ -18,6 +17,6 @@ namespace Order.Application.Features.Commands.CheckoutOrder
         public string? Expiration { get; set; }
         public string? Cvv { get; set; }
         public int? PaymentMethod { get; set; }
-        public Guid CorrelationId { get; set; }
+        public string? Status { get; set; }
     }
 }
