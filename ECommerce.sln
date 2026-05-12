@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36310.24
+# Visual Studio Version 18
+VisualStudioVersion = 18.5.11723.231
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{5854FF58-B8C5-05C6-5BF2-ACE42193F22B}"
 EndProject
@@ -21,6 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{28
 	ProjectSection(SolutionItems) = preProject
 		Architecture.jpg = Architecture.jpg
 		ReadMe.md = ReadMe.md
+		SAGA.webp = SAGA.webp
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Basket", "Basket", "{5991CCA7-7B8E-F5C0-A704-5C636E45E198}"
@@ -62,6 +63,14 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateways", "Gateways", "{C3A202AD-EADD-4864-49DF-ED20E2971546}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocelot.ApiGateway", "Gateways\Ocelot.ApiGateway\Ocelot.ApiGateway.csproj", "{21046416-2D19-4A88-A10C-3DA88693668D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Payment", "Payment", "{32546364-A4DA-484D-9C2B-8393C744B034}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payment.API", "Services\Payment\Payment.API\Payment.API.csproj", "{E2F26F13-04CE-4B91-B629-CACEDB4EB995}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{EBD464B7-3615-42F5-B719-8A29F53026C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.API", "Services\Identity\Identity.API\Identity.API.csproj", "{DF71930D-E60B-4DC2-86EF-591DCC20D704}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -149,6 +158,14 @@ Global
 		{21046416-2D19-4A88-A10C-3DA88693668D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21046416-2D19-4A88-A10C-3DA88693668D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21046416-2D19-4A88-A10C-3DA88693668D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2F26F13-04CE-4B91-B629-CACEDB4EB995}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2F26F13-04CE-4B91-B629-CACEDB4EB995}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2F26F13-04CE-4B91-B629-CACEDB4EB995}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2F26F13-04CE-4B91-B629-CACEDB4EB995}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF71930D-E60B-4DC2-86EF-591DCC20D704}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF71930D-E60B-4DC2-86EF-591DCC20D704}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF71930D-E60B-4DC2-86EF-591DCC20D704}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF71930D-E60B-4DC2-86EF-591DCC20D704}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -177,6 +194,10 @@ Global
 		{FB570BC6-F5B4-4AEF-9779-12E6C5088F39} = {DFEE68D8-A7D0-1A41-506C-9B74AA9A7B7B}
 		{601CA853-CF9E-4859-BFBC-E23B2B86778C} = {DFEE68D8-A7D0-1A41-506C-9B74AA9A7B7B}
 		{21046416-2D19-4A88-A10C-3DA88693668D} = {C3A202AD-EADD-4864-49DF-ED20E2971546}
+		{32546364-A4DA-484D-9C2B-8393C744B034} = {5854FF58-B8C5-05C6-5BF2-ACE42193F22B}
+		{E2F26F13-04CE-4B91-B629-CACEDB4EB995} = {32546364-A4DA-484D-9C2B-8393C744B034}
+		{EBD464B7-3615-42F5-B719-8A29F53026C6} = {5854FF58-B8C5-05C6-5BF2-ACE42193F22B}
+		{DF71930D-E60B-4DC2-86EF-591DCC20D704} = {EBD464B7-3615-42F5-B719-8A29F53026C6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {38ACD587-4432-40AB-B2D0-E23FFEC72049}

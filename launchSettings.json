@@ -8,7 +8,9 @@
         "basket.api": "StartDebugging",
         "discount.api": "StartDebugging",
         "order.api": "StartDebugging",
-        "ocelot.apigateway": "StartDebugging"
+        "ocelot.apigateway": "StartDebugging",
+        "payment.api": "StartDebugging",
+        "identity.api": "StartDebugging"
       }
     }
   }

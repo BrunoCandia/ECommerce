@@ -73,6 +73,8 @@ namespace Catalog.API.Controllers
 
             var products = await _mediator.Send(query);
 
+            _logger.LogInformation("Retrieved paginated products");
+
             return Ok(products);
         }
 

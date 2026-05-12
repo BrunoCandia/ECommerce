@@ -70,13 +70,26 @@ builder.Services.AddHostedService<OutboxMessageDispatcher>();
 // Register MassTransit and RabbitMQ
 builder.Services.AddMassTransit(config =>
 {
+    // Set the consumer, allowing configuration when it is configured on an endpoint
     config.AddConsumer<BasketOrderConsumer>();
+    config.AddConsumer<PaymentCompletedConsumer>();
+    config.AddConsumer<PaymentFailedConsumer>();
     config.UsingRabbitMq((ct, cfg) =>
     {
         cfg.Host(builder.Configuration["EventBusSettings:HostAddress"]);
+
+        // Provide the queue name with the consumer settings
         cfg.ReceiveEndpoint(EventBusConstants.BasketCheckoutQueue, e =>
         {
             e.ConfigureConsumer<BasketOrderConsumer>(ct);
+        });
+        cfg.ReceiveEndpoint(EventBusConstants.PaymentCompletedQueue, e =>
+        {
+            e.ConfigureConsumer<PaymentCompletedConsumer>(ct);
+        });
+        cfg.ReceiveEndpoint(EventBusConstants.PaymentFailedQueue, e =>
+        {
+            e.ConfigureConsumer<PaymentFailedConsumer>(ct);
         });
     });
 });
@@ -104,10 +117,10 @@ if (app.Environment.IsDevelopment())
     {
         options.RoutePrefix = string.Empty;
 
-        // Set the Swagger JSON endpoint: http://localhost:8000/swagger/v1/swagger.json
+        // Set the Swagger JSON endpoint: http://localhost:8003/swagger/v1/swagger.json
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "Order.Api v1");
 
-        // Serve Swagger UI at /swagger: http://localhost:8000/swagger/index.html
+        // Serve Swagger UI at /swagger: http://localhost:8003/swagger/index.html
         ////options.RoutePrefix = "swagger";
 
         // IMPORTANT

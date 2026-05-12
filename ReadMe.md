@@ -32,11 +32,11 @@ pass: Password@123
 - Revert the very first migration: update-database 0 -StartupProject Order.API -Project Order.Infrastructure -Context OrderContext
 - Remove migration: remove-migration -StartupProject Order.API -Project Order.Infrastructure -Context OrderContext
 
-## Create Migration
+## Create Migration in "Order"
 
 add-migration Initial-Migration -StartupProject Order.API -Project Order.Infrastructure
 
-## Apply db migration
+## Apply db migration in "Order"
 
 Run the application to apply migrations to the database. The logic is in the Program.cs file
 
@@ -85,6 +85,28 @@ http://localhost:8001/api/v1/Basket/CheckoutBasket
 ### Verify the Order
 
 http://localhost:8003/api/v1/Order/GetOrderByUserName/bruno.candia
+
+## Create Migration in "Identity"
+
+Run Docker Compose without debugging
+
+Run the following command in the Package Manager Console
+
+- Add migration: add-migration Initial-Migration -StartupProject Identity.API
+
+## Apply db migration in "Identity"
+
+Run Docker Compose without debugging
+
+Run the following command in the Package Manager Console
+
+- Update database: update-database -StartupProject Identity.API
+
+### Connecting to SQL Server running in a docker container from local machine using SQL Server Management Studio (SSMS)
+
+- Server: localhost,1434
+- User: sa
+- Password: Password@1
 
 ## Angular 20
 
@@ -206,3 +228,91 @@ docker compose down -v
 CI can run:  
 docker compose -f docker-compose.yml -f docker-compose.override.yml up -d --build  
 .dcoproj only needed for Visual Studio.
+
+## SAGA Explanation
+
+The approach implemented here is Choreography-based Saga. There is no central orchestrator and each service listens to an event and independently fires the next one. That's the hallmark of Choreography.
+To implement Orchestration Saga instead, MassTransit gives you a first-class MassTransitStateMachine. Here's the skeleton:
+
+```csharp
+public class OrderStateMachine : MassTransitStateMachine<OrderState>
+{
+    public State PaymentPending { get; private set; }
+
+    public State Completed { get; private set; }
+
+    public State Failed { get; private set; }
+
+    public Event<OrderCreatedEvent> OrderCreated { get; private set; }
+
+    public Event<PaymentCompletedEvent> PaymentCompleted { get; private set; }
+
+    public Event<PaymentFailedEvent> PaymentFailed { get; private set; }
+
+    public OrderStateMachine()
+    {
+        InstanceState(x => x.CurrentState);
+
+        Event(() => OrderCreated, x => x.CorrelateById(m => m.Message.Id));
+
+        Event(() => PaymentCompleted, x => x.CorrelateById(m => m.Message.OrderId));
+
+        Event(() => PaymentFailed, x => x.CorrelateById(m => m.Message.OrderId));
+
+        Initially(
+            When(OrderCreated)
+                .Then(ctx => ctx.Saga.OrderId = ctx.Message.Id)
+                .Publish(ctx => new ProcessPaymentCommand { OrderId = ctx.Saga.OrderId })
+                .TransitionTo(PaymentPending)
+        );
+
+        During(PaymentPending,
+            When(PaymentCompleted)
+                .TransitionTo(Completed)
+                .Finalize(),
+            When(PaymentFailed)
+                .TransitionTo(Failed)
+                .Finalize()
+        );
+    }
+}
+```
+
+**Even we decide to use Orchestrator there still won't be any one single centralized point/service which might orchestrate and switch all the states of each and every microservice (like mediator pattern) but the orchestration (state switching) responsibility belongs to the scope of given domain service?
+Here in the example  we consider "OrderState" orchestration which as I assume will be a part of Order microservice, but for example if we had kind of state of different domain (not related directly to the scope of order), like for example status of "Parcel Delivery to the Customer".
+So what I mean, the code of such "Parcel Delivery" event orchestration would a part of its Domain service ("ParcelDeliveryService"), and again there won't be any central point dedicated for orchestrating OrderState, PaymentState, DeliveryState and all the rest of events in our application but all of them would be scattered across their domain services?**
+
+In MassTransit Saga Orchestration, each StateMachine owns the state of one business process, not one microservice. So you are right that OrderStateMachine lives in the Order service. And ParcelDeliveryStateMachine would live in the Delivery service. There is no single God-orchestrator managing everything.
+But here is the nuance — a Saga does not have to map 1-to-1 with a microservice.
+
+In enterprise systems, you often have what is called a Process Manager — a dedicated Saga that spans multiple domains. For example:
+
+![Arquitectura](./SAGA.webp)
+
+This OrderFulfillmentSaga owns the end-to-end business process state — not the internal state of any individual service. It is a coordinator, not a controller.
+
+So to resumee, you can have:
+
+In small to medium systems — yes, each domain owns its own Saga. OrderStateMachine in Order service, DeliveryStateMachine in Delivery service. Scattered by design. That is fine.
+In enterprise systems — you introduce a dedicated Process Manager Saga that orchestrates the cross-domain flow. But crucially — it only manages transition states (PaymentPending, ShipmentCreated etc.). It does not own business logic. Business logic stays inside each domain service.
+
+The real-world rule of thumb: if a business process touches more than 3 services and has compensation steps — extract it into a dedicated Process Manager. If it stays within one domain boundary — keep the Saga inside that service.
+
+There is no single God-orchestrator in well-designed systems. Each Saga owns one process. The difference is knowing when to extract a cross-domain Process Manager and when to keep it local.
+
+**Such "Process Manager" component would appear as a separate service? Kind of non-domain microservice, but developed and deployed separately? Or it is still a pattern hidden and spread across domain services?**
+
+Both are valid — and the choice depends on complexity.
+
+Option 1 — Embedded in the owning domain (simpler systems)
+If the process is clearly owned by one domain, keep the StateMachine inside that service. OrderFulfillmentSaga lives in the Order service because Order initiates and owns the outcome.
+Deployment is simple. One less service to manage.
+
+Option 2 — Dedicated Saga service (enterprise systems)
+When the process spans many domains and no single domain clearly owns it, you extract it into a standalone service. In practice this is often called a Choreography Orchestrator or Saga Coordinator service.
+
+This service has:
+Its own database for saga state persistence
+No business logic — only state transitions and command dispatching
+Its own CI/CD pipeline
+Scales independently from domain services

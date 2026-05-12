@@ -101,6 +101,45 @@ services:
     ports:
       - "8003:8080"
 
+  payment.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - "EventBusSettings__HostAddress=amqp://guest:guest@rabbitmq:5672"
+      - "ElasticConfiguration__Uri=http://elasticsearch:9200" 
+    ports:
+      - "8004:8080"
+      - "8081"    
+
+  identitydb:
+    container_name: identitydb
+    environment:
+      SA_PASSWORD: "Password@1"
+      ACCEPT_EULA: "Y"
+    restart: always
+    ports:
+      - "1434:1433"
+    volumes:
+      - identitydb_data:/var/opt/mssql
+
+  identity.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - "ConnectionStrings__IdentityConnection=Server=identitydb;Database=IdentityDb;User Id=sa;Password=Password@1;TrustServerCertificate=True" 
+      - "Jwt__Key=super secret key super secret key super secret key super secret key super secret key"
+      - "Jwt__Issuer=ecommerce.identity"
+      - "Jwt__Audience=ecommerce.clients"
+      - "Jwt__DurationInMinutes=60"
+    depends_on:
+      identitydb:
+        condition: service_started
+    ports:
+      - "8005:8080"
+      - "8081"    
+
   pgadmin:
     container_name: pgadmin
     environment:
@@ -165,4 +204,3 @@ services:
       - order.api
     ports:
       - "8010:8080"
-
