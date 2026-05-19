@@ -1,131 +1,161 @@
 {
   "Routes": [
     {
-      "DownstreamPathTemplate": "/api/v1/Catalog/GetAllProducts",
-      "DownstreamScheme": "https",
+      "DownstreamPathTemplate": "/api/v1/Catalog/GetProducts",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "host.docker.internal",
           "Port": 8000
         }
       ],
-      "UpstreamPathTemplate": "/Catalog/GetAllProducts",
+      "UpstreamPathTemplate": "/Catalog/GetProducts",
       "UpstreamHttpMethod": [ "GET" ],
       "AddHeadersToRequest": {
         "x-correlation-id": "{X-Correlation-Id}"
       }
     },
     {
-      "DownstreamPathTemplate": "/api/v1/Catalog/{id}",
-      "DownstreamScheme": "https",
+      "DownstreamPathTemplate": "/api/v1/Catalog/GetProductById/{id}",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "host.docker.internal",
           "Port": 8000
         }
       ],
-      "UpstreamPathTemplate": "/Catalog/{id}",
-      "UpstreamHttpMethod": [ "GET", "DELETE" ],
-      "AddHeadersToRequest": {
-        "x-correlation-id": "{X-Correlation-Id}"
-      }
-    },
-    {
-      "DownstreamPathTemplate": "/api/v1/Catalog/productName/{productName}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 8000
-        }
-      ],
-      "UpstreamPathTemplate": "/Catalog/productName/{productName}",
+      "UpstreamPathTemplate": "/Catalog/GetProductById/{id}",
       "UpstreamHttpMethod": [ "GET" ],
       "AddHeadersToRequest": {
         "x-correlation-id": "{X-Correlation-Id}"
       }
     },
     {
-      "DownstreamPathTemplate": "/api/v1/Catalog",
-      "DownstreamScheme": "https",
+      "DownstreamPathTemplate": "/api/v1/Catalog/GetProductByName/{name}",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "host.docker.internal",
           "Port": 8000
         }
       ],
-      "UpstreamPathTemplate": "/Catalog",
+      "UpstreamPathTemplate": "/Catalog/GetProductByName/{name}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AddHeadersToRequest": {
+        "x-correlation-id": "{X-Correlation-Id}"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/Catalog/GetProductsPaginated",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "host.docker.internal",
+          "Port": 8000
+        }
+      ],
+      "UpstreamPathTemplate": "/Catalog/GetProductsPaginated",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AddHeadersToRequest": {
+        "x-correlation-id": "{X-Correlation-Id}"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/Catalog/GetBrands",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "host.docker.internal",
+          "Port": 8000
+        }
+      ],
+      "UpstreamPathTemplate": "/Catalog/GetBrands",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AddHeadersToRequest": {
+        "x-correlation-id": "{X-Correlation-Id}"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/Catalog/GetTypes",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "host.docker.internal",
+          "Port": 8000
+        }
+      ],
+      "UpstreamPathTemplate": "/Catalog/GetTypes",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AddHeadersToRequest": {
+        "x-correlation-id": "{X-Correlation-Id}"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/Catalog/GetProductsByBrand/{brand}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "host.docker.internal",
+          "Port": 8000
+        }
+      ],
+      "UpstreamPathTemplate": "/Catalog/GetProductsByBrand/{brand}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AddHeadersToRequest": {
+        "x-correlation-id": "{X-Correlation-Id}"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/Catalog/CreateProduct",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "host.docker.internal",
+          "Port": 8000
+        }
+      ],
+      "UpstreamPathTemplate": "/Catalog/CreateProduct",
       "UpstreamHttpMethod": [ "POST" ],
       "AddHeadersToRequest": {
         "x-correlation-id": "{X-Correlation-Id}"
       }
     },
     {
-      "DownstreamPathTemplate": "/api/v1/Catalog/{id}",
-      "DownstreamScheme": "https",
+      "DownstreamPathTemplate": "/api/v1/Catalog/UpdateProduct",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "host.docker.internal",
           "Port": 8000
         }
       ],
-      "UpstreamPathTemplate": "/Catalog/{id}",
+      "UpstreamPathTemplate": "/Catalog/UpdateProduct",
       "UpstreamHttpMethod": [ "PUT" ],
       "AddHeadersToRequest": {
         "x-correlation-id": "{X-Correlation-Id}"
       }
     },
     {
-      "DownstreamPathTemplate": "/api/v1/Catalog/GetAllBrands",
-      "DownstreamScheme": "https",
+      "DownstreamPathTemplate": "/api/v1/Catalog/DeleteProduct/{id}",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "host.docker.internal",
           "Port": 8000
         }
       ],
-      "UpstreamPathTemplate": "/Catalog/GetAllBrands",
-      "UpstreamHttpMethod": [ "GET" ],
-      "AddHeadersToRequest": {
-        "x-correlation-id": "{X-Correlation-Id}"
-      }
-    },
-    {
-      "DownstreamPathTemplate": "/api/v1/Catalog/GetAllTypes",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 8000
-        }
-      ],
-      "UpstreamPathTemplate": "/Catalog/GetAllTypes",
-      "UpstreamHttpMethod": [ "GET" ],
-      "AddHeadersToRequest": {
-        "x-correlation-id": "{X-Correlation-Id}"
-      }
-    },
-    {
-      "DownstreamPathTemplate": "/api/v1/Catalog/brand/{brand}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 8000
-        }
-      ],
-      "UpstreamPathTemplate": "/Catalog/brand/{brand}",
-      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamPathTemplate": "/Catalog/DeleteProduct/{id}",
+      "UpstreamHttpMethod": [ "DELETE" ],
       "AddHeadersToRequest": {
         "x-correlation-id": "{X-Correlation-Id}"
       }
     },
     {
       "DownstreamPathTemplate": "/api/v1/Basket/{userName}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "host.docker.internal",
           "Port": 8001
         }
       ],
@@ -137,10 +167,10 @@
     },
     {
       "DownstreamPathTemplate": "/api/v1/Basket",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "host.docker.internal",
           "Port": 8001
         }
       ],
@@ -152,10 +182,10 @@
     },
     {
       "DownstreamPathTemplate": "/api/v1/Basket/Checkout",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "host.docker.internal",
           "Port": 8001
         }
       ],
@@ -163,17 +193,17 @@
       "UpstreamHttpMethod": [ "POST" ],
       "AddHeadersToRequest": {
         "x-correlation-id": "{X-Correlation-Id}"
-      }//,
-      //"AuthenticationOptions": {
-      //  "AuthenticationProviderKey": "Bearer"
-      //}
+      },
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
     {
       "DownstreamPathTemplate": "/api/v1/Order/{userName}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "host.docker.internal",
           "Port": 8003
         }
       ],
@@ -185,10 +215,10 @@
     },
     {
       "DownstreamPathTemplate": "/api/v1/Order",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "host.docker.internal",
           "Port": 8003
         }
       ],
@@ -200,10 +230,10 @@
     },
     {
       "DownstreamPathTemplate": "/api/v1/Order/{id}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "host.docker.internal",
           "Port": 8003
         }
       ],
@@ -215,10 +245,10 @@
     },
     {
       "DownstreamPathTemplate": "/api/auth/{everything}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "host.docker.internal",
           "Port": 8005
         }
       ],
@@ -228,10 +258,246 @@
         "x-correlation-id": "{X-Correlation-Id}"
       }
     }
-
-
   ],
   "GlobalConfiguration": {
     "BaseUrl": "http://localhost:8010"
   }
 }
+
+//{
+//  "Routes": [
+//    {
+//      "DownstreamPathTemplate": "/api/v1/Catalog/GetAllProducts",
+//      "DownstreamScheme": "https",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "host.docker.internal",
+//          "Port": 8000
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/Catalog/GetAllProducts",
+//      "UpstreamHttpMethod": [ "GET" ],
+//      "AddHeadersToRequest": {
+//        "x-correlation-id": "{X-Correlation-Id}"
+//      }
+//    },
+//    {
+//      "DownstreamPathTemplate": "/api/v1/Catalog/{id}",
+//      "DownstreamScheme": "https",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "host.docker.internal",
+//          "Port": 8000
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/Catalog/{id}",
+//      "UpstreamHttpMethod": [ "GET", "DELETE" ],
+//      "AddHeadersToRequest": {
+//        "x-correlation-id": "{X-Correlation-Id}"
+//      }
+//    },
+//    {
+//      "DownstreamPathTemplate": "/api/v1/Catalog/productName/{productName}",
+//      "DownstreamScheme": "https",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "host.docker.internal",
+//          "Port": 8000
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/Catalog/productName/{productName}",
+//      "UpstreamHttpMethod": [ "GET" ],
+//      "AddHeadersToRequest": {
+//        "x-correlation-id": "{X-Correlation-Id}"
+//      }
+//    },
+//    {
+//      "DownstreamPathTemplate": "/api/v1/Catalog",
+//      "DownstreamScheme": "https",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "host.docker.internal",
+//          "Port": 8000
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/Catalog",
+//      "UpstreamHttpMethod": [ "POST" ],
+//      "AddHeadersToRequest": {
+//        "x-correlation-id": "{X-Correlation-Id}"
+//      }
+//    },
+//    {
+//      "DownstreamPathTemplate": "/api/v1/Catalog/{id}",
+//      "DownstreamScheme": "https",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "host.docker.internal",
+//          "Port": 8000
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/Catalog/{id}",
+//      "UpstreamHttpMethod": [ "PUT" ],
+//      "AddHeadersToRequest": {
+//        "x-correlation-id": "{X-Correlation-Id}"
+//      }
+//    },
+//    {
+//      "DownstreamPathTemplate": "/api/v1/Catalog/GetAllBrands",
+//      "DownstreamScheme": "https",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "host.docker.internal",
+//          "Port": 8000
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/Catalog/GetAllBrands",
+//      "UpstreamHttpMethod": [ "GET" ],
+//      "AddHeadersToRequest": {
+//        "x-correlation-id": "{X-Correlation-Id}"
+//      }
+//    },
+//    {
+//      "DownstreamPathTemplate": "/api/v1/Catalog/GetAllTypes",
+//      "DownstreamScheme": "https",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "host.docker.internal",
+//          "Port": 8000
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/Catalog/GetAllTypes",
+//      "UpstreamHttpMethod": [ "GET" ],
+//      "AddHeadersToRequest": {
+//        "x-correlation-id": "{X-Correlation-Id}"
+//      }
+//    },
+//    {
+//      "DownstreamPathTemplate": "/api/v1/Catalog/brand/{brand}",
+//      "DownstreamScheme": "https",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "host.docker.internal",
+//          "Port": 8000
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/Catalog/brand/{brand}",
+//      "UpstreamHttpMethod": [ "GET" ],
+//      "AddHeadersToRequest": {
+//        "x-correlation-id": "{X-Correlation-Id}"
+//      }
+//    },
+//    {
+//      "DownstreamPathTemplate": "/api/v1/Basket/{userName}",
+//      "DownstreamScheme": "https",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "host.docker.internal",
+//          "Port": 8001
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/Basket/{userName}",
+//      "UpstreamHttpMethod": [ "GET", "DELETE" ],
+//      "AddHeadersToRequest": {
+//        "x-correlation-id": "{X-Correlation-Id}"
+//      }
+//    },
+//    {
+//      "DownstreamPathTemplate": "/api/v1/Basket",
+//      "DownstreamScheme": "https",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "host.docker.internal",
+//          "Port": 8001
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/Basket",
+//      "UpstreamHttpMethod": [ "POST" ],
+//      "AddHeadersToRequest": {
+//        "x-correlation-id": "{X-Correlation-Id}"
+//      }
+//    },
+//    {
+//      "DownstreamPathTemplate": "/api/v1/Basket/Checkout",
+//      "DownstreamScheme": "https",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "host.docker.internal",
+//          "Port": 8001
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/Basket/Checkout",
+//      "UpstreamHttpMethod": [ "POST" ],
+//      "AddHeadersToRequest": {
+//        "x-correlation-id": "{X-Correlation-Id}"
+//      },
+//      "AuthenticationOptions": {
+//        "AuthenticationProviderKey": "Bearer"
+//      }
+//    },
+//    {
+//      "DownstreamPathTemplate": "/api/v1/Order/{userName}",
+//      "DownstreamScheme": "https",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "host.docker.internal",
+//          "Port": 8003
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/Order/{userName}",
+//      "UpstreamHttpMethod": [ "GET" ],
+//      "AddHeadersToRequest": {
+//        "x-correlation-id": "{X-Correlation-Id}"
+//      }
+//    },
+//    {
+//      "DownstreamPathTemplate": "/api/v1/Order",
+//      "DownstreamScheme": "https",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "host.docker.internal",
+//          "Port": 8003
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/Order",
+//      "UpstreamHttpMethod": [ "POST", "PUT" ],
+//      "AddHeadersToRequest": {
+//        "x-correlation-id": "{X-Correlation-Id}"
+//      }
+//    },
+//    {
+//      "DownstreamPathTemplate": "/api/v1/Order/{id}",
+//      "DownstreamScheme": "https",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "host.docker.internal",
+//          "Port": 8003
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/Order/{id}",
+//      "UpstreamHttpMethod": [ "DELETE" ],
+//      "AddHeadersToRequest": {
+//        "x-correlation-id": "{X-Correlation-Id}"
+//      }
+//    },
+//    {
+//      "DownstreamPathTemplate": "/api/auth/{everything}",
+//      "DownstreamScheme": "https",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "host.docker.internal",
+//          "Port": 8005
+//        }
+//      ],
+//      "UpstreamPathTemplate": "/identity/api/auth/{everything}",
+//      "UpstreamHttpMethod": [ "POST", "GET" ],
+//      "AddHeadersToRequest": {
+//        "x-correlation-id": "{X-Correlation-Id}"
+//      }
+//    }
+
+
+//  ],
+//  "GlobalConfiguration": {
+//    "BaseUrl": "http://localhost:8010"
+//  }
+//}

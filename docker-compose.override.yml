@@ -129,7 +129,7 @@ services:
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
       - "ConnectionStrings__IdentityConnection=Server=identitydb;Database=IdentityDb;User Id=sa;Password=Password@1;TrustServerCertificate=True" 
-      - "Jwt__Key=super secret key super secret key super secret key super secret key super secret key"
+      - "Jwt__Key=super_secret_key_super_secret_key_super_secret_key_super_secret_key_super_secret_key"
       - "Jwt__Issuer=ecommerce.identity"
       - "Jwt__Audience=ecommerce.clients"
       - "Jwt__DurationInMinutes=60"
@@ -197,10 +197,15 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
+      - "Jwt__Key=super_secret_key_super_secret_key_super_secret_key_super_secret_key_super_secret_key"
+      - "Jwt__Issuer=ecommerce.identity"
+      - "Jwt__Audience=ecommerce.clients"
     depends_on:
       - catalog.api
       - basket.api
       - discount.api
       - order.api
+      - payment.api
+      - identity.api
     ports:
       - "8010:8080"

@@ -64,6 +64,12 @@ services:
       context: .
       dockerfile: Services/Identity/Identity.API/Dockerfile
 
+  payment.api:
+    image: ${DOCKER_REGISTRY-}paymentapi
+    build:
+      context: .
+      dockerfile: Services/Payment/Payment.API/Dockerfile
+
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.14.3
 
@@ -77,12 +83,6 @@ services:
     build:
       context: .
       dockerfile: Gateways/Ocelot.ApiGateway/Dockerfile
-
-  payment.api:
-    image: ${DOCKER_REGISTRY-}paymentapi
-    build:
-      context: .
-      dockerfile: Services/Payment/Payment.API/Dockerfile
 
 volumes:
   mongo_data:

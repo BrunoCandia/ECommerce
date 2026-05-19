@@ -1,12 +1,17 @@
+using Common.Logging;
 using EventBus.Messages.Common;
 using MassTransit;
 using Payment.API.EventBusConsumer;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+// Serilog configuration
+builder.Host.UseSerilog(Logging.ConfigureLogger);
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();

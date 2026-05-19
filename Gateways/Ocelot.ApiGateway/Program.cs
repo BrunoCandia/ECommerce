@@ -1,6 +1,9 @@
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Ocelot.ApiGateway.Middleware;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,22 +35,26 @@ var issuer = jwtSettings["Issuer"];
 var audience = jwtSettings["Audience"];
 
 //Add JWT auth to ocelot
-////builder.Services.AddAuthentication("Bearer")
-////    .AddJwtBearer("Bearer", options =>
-////    {
-////        options.TokenValidationParameters = new TokenValidationParameters
-////        {
-////            ValidateIssuer = true,
-////            ValidateAudience = true,
-////            ValidateLifetime = true,
-////            ValidateIssuerSigningKey = true,
-////            ValidIssuer = issuer,
-////            ValidAudience = audience,
-////            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
-////        };
-////    });
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = issuer,
+            ValidAudience = audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key!))
+        };
+    });
 
-////builder.Services.AddAuthorization();
+builder.Services.AddAuthorization();
+
+builder.Services.AddOcelot(builder.Configuration);
+
+builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddControllers();
 
@@ -75,8 +82,6 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
-
-builder.Services.AddOcelot(builder.Configuration);
 
 var app = builder.Build();
 
@@ -108,11 +113,17 @@ app.UseRouting();
 // CORS must come before Ocelot
 app.UseCors("AllowFrontend");
 
-////app.UseMiddleware<CorrelationIdMiddleware>();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
-////app.UseAuthentication();
+// Add CorrelationIdMiddleware to the pipeline
+app.UseMiddleware<CorrelationIdMiddleware>();
 
-////app.UseAuthorization();
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.MapControllers();
 

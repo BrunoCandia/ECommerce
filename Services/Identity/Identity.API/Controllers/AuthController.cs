@@ -37,6 +37,8 @@ namespace Identity.API.Controllers
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
 
+            _logger.LogInformation("User {@Email} registration attempted", registerDto.Email);
+
             if (!result.Succeeded)
             {
                 foreach (var error in result.Errors)
@@ -70,6 +72,8 @@ namespace Identity.API.Controllers
             var token = GenerateToken(user);
 
             var newUserDto = new UserDto(token);
+
+            _logger.LogInformation("User {@Email} logged in successfully", loginDto.Email);
 
             return Ok(newUserDto);
         }

@@ -40,7 +40,7 @@ namespace Payment.API.EventBusConsumer
 
                 await _publishEndpoint.Publish(paymentCompletedEvent);
 
-                _logger.LogInformation("Payment completed for Order Id: {OrderId} and Correlation Id: {CorrelationId}", message.Id, context.CorrelationId.GetValueOrDefault());
+                _logger.LogInformation("Payment completed for Order Id: {@OrderId} and Correlation Id: {@CorrelationId}", message.Id, context.CorrelationId.GetValueOrDefault());
             }
             else
             {
@@ -55,7 +55,7 @@ namespace Payment.API.EventBusConsumer
 
                 await _publishEndpoint.Publish(paymentFailedEvent);
 
-                _logger.LogWarning("Payment failed for Order Id: {OrderId} and Correlation Id: {CorrelationId}. Reason: {Reason}", message.Id, context.CorrelationId.GetValueOrDefault(), paymentFailedEvent.FailureReason);
+                _logger.LogWarning("Payment failed for Order Id: {@OrderId} and Correlation Id: {@CorrelationId}. Reason: {@Reason}", message.Id, context.CorrelationId.GetValueOrDefault(), paymentFailedEvent.FailureReason);
             }
         }
     }

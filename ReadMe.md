@@ -1,5 +1,17 @@
 
-1-Catalog
+## TODO
+
+- Update ocelot configuration to route to the correct ports for each API (should use the gateway port 8010)
+- Update postman collection to use the gateway port 8010 instead of the individual API ports (8000, 8001, 8002, 8003)
+
+## Identity Service
+
+first name: Jhon
+last name: Doe
+email: jhon.doe@test.com
+password: Password@1
+
+## Services and Tools
 
 ### Use Mongo Express to manage your MongoDB database.
 http://localhost:8081
@@ -107,6 +119,10 @@ Run the following command in the Package Manager Console
 - Server: localhost,1434
 - User: sa
 - Password: Password@1
+
+## Elastic Search
+
+http://localhost:5601/
 
 ## Angular 20
 
