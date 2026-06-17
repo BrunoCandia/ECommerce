@@ -1,5 +1,6 @@
 ﻿using Identity.API.DTO;
 using Identity.API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -14,12 +15,17 @@ namespace Identity.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _configuration;
         private readonly ILogger<AuthController> _logger;
 
-        public AuthController(UserManager<ApplicationUser> userManager, IConfiguration configuration, ILogger<AuthController> logger)
+        // Identity with SPA: cookie-based authentication and token-based authentication for APIs
+        // https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity-api-authorization?view=aspnetcore-10.0
+
+        public AuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, ILogger<AuthController> logger)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
             _configuration = configuration;
             _logger = logger;
         }
@@ -71,11 +77,49 @@ namespace Identity.API.Controllers
 
             var token = GenerateToken(user);
 
-            var newUserDto = new UserDto(token);
+            var newUserDto = new UserDto(token, user.FirstName, user.LastName, user.Email);
 
             _logger.LogInformation("User {@Email} logged in successfully", loginDto.Email);
 
             return Ok(newUserDto);
+        }
+
+        [HttpGet("user-info")]
+        public async Task<ActionResult> GetUserInfo(CancellationToken cancellationToken)
+        {
+            // Log all claims to debug what arrives
+            _logger.LogInformation("User authenticated: {IsAuthenticated}", User?.Identity?.IsAuthenticated ?? false);
+            _logger.LogInformation("Incoming claims: {Claims}", User?.Claims?.Select(c => $"{c.Type}:{c.Value}").ToArray());
+
+            //var email = User.FindFirstValue(JwtRegisteredClaimNames.Sub);
+            var email = User.FindFirstValue(ClaimTypes.Email);
+
+            if (User.Identity is not null && !User.Identity.IsAuthenticated && string.IsNullOrWhiteSpace(email))
+                return NoContent();
+
+            var user = await _userManager.FindByEmailAsync(email!);
+            //var user = await _userManager.UserManager.GetUserByEmailWithAddress(User);
+
+            if (user is null)
+                return Unauthorized();
+
+            return Ok(new
+            {
+                user.FirstName,
+                user.LastName,
+                user.Email,
+                //Address = user.Address?.ToDto(),
+                //Roles = User.FindFirstValue(ClaimTypes.Role)
+            });
+        }
+
+        [Authorize]
+        [HttpPost("logout")]
+        public async Task<ActionResult> Logout(CancellationToken cancellationToken)
+        {
+            await _signInManager.SignOutAsync();
+
+            return NoContent();
         }
 
         private string GenerateToken(ApplicationUser user)
@@ -96,9 +140,11 @@ namespace Identity.API.Controllers
 
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim("uid", user.Id)
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id),                                // subject = user id (recommended)
+                new Claim(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),           // standard jwt "email"
+                new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName ?? string.Empty),
+                new Claim(ClaimTypes.Email, user.Email ?? string.Empty),
+                new Claim(ClaimTypes.Name, user.UserName ?? string.Empty)
             };
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);

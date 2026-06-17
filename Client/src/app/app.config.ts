@@ -1,11 +1,27 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, inject, provideAppInitializer, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
+import { loadingInterceptor } from './core/interceptors/loading.interceptor';
+import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { InitService } from './core/services/init.service';
+import { lastValueFrom } from 'rxjs';
 
 // import { provideAnimationsAsync } from '@angular/platform-browser/animations/async'
+
+function initializeApp(initService: InitService) {
+  return () => {
+    lastValueFrom(initService.init())
+      .then(() => {
+        console.log('App initialization completed');
+      })
+      .catch(error => {
+        console.error('App initialization failed:', error);
+      });
+  };
+}
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,6 +29,10 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     // provideAnimationsAsync()
-    provideHttpClient(withInterceptors([errorInterceptor]))
+    provideHttpClient(withInterceptors([errorInterceptor, loadingInterceptor, authInterceptor])),
+    provideAppInitializer(() => {
+      const initializerFn = (initializeApp)(inject(InitService));
+      return initializerFn();
+    })
   ]
 };

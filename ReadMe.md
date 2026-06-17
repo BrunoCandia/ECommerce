@@ -1,15 +1,37 @@
 
 ## TODO
 
+- Add to Ocelot in get-user-info endpoint and login endpoint
+"AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+
+- Test GetUserInfo endpoint in Identity API
 - Update ocelot configuration to route to the correct ports for each API (should use the gateway port 8010)
 - Update postman collection to use the gateway port 8010 instead of the individual API ports (8000, 8001, 8002, 8003)
 
 ## Identity Service
 
-first name: Jhon
-last name: Doe
-email: jhon.doe@test.com
-password: Password@1
+### Identity with SPA: cookie-based authentication and token-based authentication for APIs
+- https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity-api-authorization?view=aspnetcore-10.0
+
+- Use cookie-based authentication when the client is a web application that can use cookies.
+  - If useCookies is true, the server will set an HttpOnly cookie with the authentication token, 
+    and the client will include this cookie in subsequent requests to authenticate the user. 
+  - This approach is more secure against XSS attacks since the token is not accessible via JavaScript.
+
+- Use token-based authentication when the client is a mobile app or a third-party application that cannot use cookies, 
+  or when you want to have more control over the authentication process on the client side.
+  - If useCookies is false, the server will return the authentication token in the response body, 
+    and the client will need to store this token (e.g., in localStorage) 
+    and include it in the Authorization header of subsequent requests. 
+  - This approach is more flexible for APIs that may be consumed by different types of clients 
+    (e.g., mobile apps, third-party applications) that cannot use cookies.
+
+- first name: Jhon
+- last name: Doe
+- email: jhon.doe@test.com
+- password: Password@1
 
 ## Services and Tools
 
