@@ -8,7 +8,9 @@ using Basket.Infrastructure.Repositories;
 using Common.Logging;
 using Discount.Grpc.Protos;
 using MassTransit;
+using Microsoft.Extensions.Http.Resilience;
 using Microsoft.OpenApi.Models;
+using Polly;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
@@ -133,6 +135,29 @@ builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(
     }
 
     configureClient.Address = new Uri(discountUrl);
+})
+    //.AddStandardResilienceHandler();
+    .AddResilienceHandler("custom", pipeline =>
+{
+    pipeline.AddTimeout(TimeSpan.FromSeconds(5));
+
+    pipeline.AddRetry(new HttpRetryStrategyOptions
+    {
+        MaxRetryAttempts = 3,                           // Maximum number of retry attempts
+        BackoffType = DelayBackoffType.Exponential,     // Use exponential backoff strategy
+        UseJitter = true,                               // Add jitter to avoid thundering herd problem
+        Delay = TimeSpan.FromMilliseconds(500)          // Initial delay before the first retry attempt
+    });
+
+    pipeline.AddCircuitBreaker(new HttpCircuitBreakerStrategyOptions
+    {
+        SamplingDuration = TimeSpan.FromSeconds(10),    // Time window for measuring failure rate
+        FailureRatio = 0.9,                             // Threshold for failure ratio to trigger the circuit breaker
+        MinimumThroughput = 5,                          // Minimum number of requests in the sampling duration before evaluating the failure ratio
+        BreakDuration = TimeSpan.FromSeconds(5)         // Duration to keep the circuit breaker open before allowing attempts again
+    });
+
+    pipeline.AddTimeout(TimeSpan.FromSeconds(1));
 });
 
 // Register MassTransit and RabbitMQ
