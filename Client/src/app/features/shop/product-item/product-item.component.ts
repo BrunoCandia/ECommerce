@@ -5,6 +5,7 @@ import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { Product } from '../../../shared/models/product';
+import { BasketService } from '../../../core/services/basket.service';
 
 @Component({
   selector: 'app-product-item',
@@ -16,9 +17,9 @@ export class ProductItemComponent {
 
   @Input() product?: Product;
   
-  constructor() {}
+  constructor(private basketService: BasketService) {}
 
-  addItemToShoppingCart(product: Product) {
-    //this.shopService.addItemToShoppingcart(product);
+  addItemToBasket(product: Product) {
+    this.basketService.addItemToBasket(product);    
   }
 }

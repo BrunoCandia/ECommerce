@@ -5,11 +5,14 @@ import { ProductDetailsComponent } from './features/shop/product-details/product
 import { NotFoundComponent } from './shared/components/not-found/not-found.component';
 import { ServerErrorComponent } from './shared/components/server-error/server-error.component';
 import { NotAuthenticatedComponent } from './shared/components/not-authenticated/not-authenticated.component';
+import { BasketComponent } from './features/basket/basket.component';
 
 export const routes: Routes = [
     {path: '', component: HomeComponent},
     {path: 'shop', component: ShopComponent},
     {path: 'shop/:id', component: ProductDetailsComponent},
+    {path: 'shopping-cart', component: BasketComponent},
+    // {path: 'basket', component: BasketComponent},
     {path: 'account', loadChildren: () => import('./features/account/routes').then(routes => routes.accountRoutes)},
     // {path: 'account/login', component: LoginComponent},
     // {path: 'account/register', component: RegisterComponent},

@@ -8,6 +8,7 @@ import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatDivider } from '@angular/material/divider';
 import { MatButton } from '@angular/material/button';
 import { MatBadge } from '@angular/material/badge';
+import { BasketService } from '../../core/services/basket.service';
 
 @Component({
   selector: 'app-header',
@@ -34,6 +35,10 @@ export class HeaderComponent implements OnInit {
     return this.busyService.loading();
   }
 
+  get itemCount() {
+    return this.basketService.itemCount();
+  }
+
   get currentUser() {
     return this.accountService.currentUser();
   }
@@ -41,7 +46,9 @@ export class HeaderComponent implements OnInit {
   constructor(
     private busyService: BusyService, 
     private accountService: AccountService,
-    private router: Router) { }
+    private router: Router,
+    private basketService: BasketService
+  ) { }
 
   logout() {
     this.accountService.logout().subscribe({

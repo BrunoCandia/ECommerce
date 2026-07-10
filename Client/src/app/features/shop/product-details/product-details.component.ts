@@ -9,6 +9,7 @@ import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatDivider } from '@angular/material/divider';
 import { FormsModule } from '@angular/forms';
+import { BasketService } from '../../../core/services/basket.service';
 
 @Component({
   selector: 'app-product-details',
@@ -22,7 +23,7 @@ export class ProductDetailsComponent implements OnInit {
   quantityInShoppingCart = 0;
   quantity = 1;
 
-  constructor(private shopService: ShopService, private activatedRoute: ActivatedRoute) { }
+  constructor(private shopService: ShopService, private activatedRoute: ActivatedRoute, private basketService: BasketService) { }
 
   ngOnInit(): void {
     this.loadProduct();
@@ -34,7 +35,8 @@ export class ProductDetailsComponent implements OnInit {
     if (id) {
       this.shopService.getProduct(id).subscribe({
         next: product => {
-          this.product = product          
+          this.product = product;
+          this.updateQuantityInShoppingCart();
         },
         error: error => console.log(error)
       });
@@ -47,10 +49,26 @@ export class ProductDetailsComponent implements OnInit {
       return;
     } else {
       // Update the shopping cart with the specified quantity
+      if (this.quantity > this.quantityInShoppingCart){
+        const itemsToAdd = this.quantity - this.quantityInShoppingCart;
+        this.quantityInShoppingCart += itemsToAdd;
+        this.basketService.addItemToBasket(this.product, itemsToAdd);
+      } else {
+        const itemsToRemove = this.quantityInShoppingCart - this.quantity;
+        this.quantityInShoppingCart += itemsToRemove;
+        this.basketService.removeItemFromBasket(this.product.id, itemsToRemove);
+      }
     }
   }
 
   getButtonText() {
     return this.quantityInShoppingCart > 0 ? 'Update Shopping Cart' : 'Add to Shopping Cart';
+  }
+
+  private updateQuantityInShoppingCart(){
+    this.quantityInShoppingCart = this.basketService.getCurrentBasket()?.items
+                                      .find(item => item.productId === this.product?.id)?.quantity || 0;
+
+    this.quantity = this.quantityInShoppingCart || 1;
   }
 }

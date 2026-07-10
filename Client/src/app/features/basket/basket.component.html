@@ -1,0 +1,18 @@
+<section>
+    @if (items?.length! > 0) {
+
+    <div class="flex w-full items-start gap-6 mt-32">
+        <div class="w-3/4">
+            @for (item of items; track item.productId) {                
+                <app-basket-item [item]="item"></app-basket-item>
+            }
+        </div>
+        <div class="w-1/4">
+            <app-order-summary></app-order-summary>
+        </div>
+    </div>
+
+    } @else {
+        <app-empty-state message="Your basket is empty" icon="remove_shopping_cart" actionText="Go to shop" (action)="navigate()"></app-empty-state>
+    }
+</section>

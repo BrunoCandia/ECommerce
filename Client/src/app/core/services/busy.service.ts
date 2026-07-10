@@ -5,20 +5,20 @@ import { Injectable, signal } from '@angular/core';
 })
 export class BusyService {
   loading = signal<boolean>(false);
-  busyRequesCount = 0;
+  busyRequestCount = 0;
 
   constructor() { }
 
   busy() {
-    this.busyRequesCount++;
+    this.busyRequestCount++;
     this.loading.set(true);
   }
 
   idle() {
-    this.busyRequesCount--;
+    this.busyRequestCount--;
 
-    if (this.busyRequesCount <= 0) {
-      this.busyRequesCount = 0;
+    if (this.busyRequestCount <= 0) {
+      this.busyRequestCount = 0;
       this.loading.set(false);
     }
   }

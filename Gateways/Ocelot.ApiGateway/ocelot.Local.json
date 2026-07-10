@@ -150,8 +150,23 @@
         "x-correlation-id": "{X-Correlation-Id}"
       }
     },
+    //{
+    //  "DownstreamPathTemplate": "/api/v1/Basket/{userName}",
+    //  "DownstreamScheme": "http",
+    //  "DownstreamHostAndPorts": [
+    //    {
+    //      "Host": "host.docker.internal",
+    //      "Port": 8001
+    //    }
+    //  ],
+    //  "UpstreamPathTemplate": "/Basket/{userName}",
+    //  "UpstreamHttpMethod": [ "GET", "DELETE" ],
+    //  "AddHeadersToRequest": {
+    //    "x-correlation-id": "{X-Correlation-Id}"
+    //  }
+    //},
     {
-      "DownstreamPathTemplate": "/api/v1/Basket/{userName}",
+      "DownstreamPathTemplate": "/api/v1/Basket/GetBasketByUserName/{userName}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -159,14 +174,14 @@
           "Port": 8001
         }
       ],
-      "UpstreamPathTemplate": "/Basket/{userName}",
-      "UpstreamHttpMethod": [ "GET", "DELETE" ],
+      "UpstreamPathTemplate": "/Basket/GetBasketByUserName/{userName}",
+      "UpstreamHttpMethod": [ "GET" ],
       "AddHeadersToRequest": {
         "x-correlation-id": "{X-Correlation-Id}"
       }
     },
     {
-      "DownstreamPathTemplate": "/api/v1/Basket",
+      "DownstreamPathTemplate": "/api/v1/Basket/DeleteBasketByUserName/{userName}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -174,7 +189,22 @@
           "Port": 8001
         }
       ],
-      "UpstreamPathTemplate": "/Basket",
+      "UpstreamPathTemplate": "/Basket/DeleteBasketByUserName/{userName}",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "AddHeadersToRequest": {
+        "x-correlation-id": "{X-Correlation-Id}"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/Basket/CreateBasket",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "host.docker.internal",
+          "Port": 8001
+        }
+      ],
+      "UpstreamPathTemplate": "/Basket/CreateBasket",
       "UpstreamHttpMethod": [ "POST" ],
       "AddHeadersToRequest": {
         "x-correlation-id": "{X-Correlation-Id}"
