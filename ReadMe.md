@@ -1,6 +1,7 @@
 
 ## TODO
 
+- Add Checkout functionallity in frontend and backend
 - Add to Ocelot in get-user-info endpoint and login endpoint
 "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"

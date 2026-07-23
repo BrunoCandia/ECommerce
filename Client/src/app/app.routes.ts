@@ -13,6 +13,7 @@ export const routes: Routes = [
     {path: 'shop/:id', component: ProductDetailsComponent},
     {path: 'shopping-cart', component: BasketComponent},
     // {path: 'basket', component: BasketComponent},
+    {path: 'checkout', loadChildren: () => import('./features/checkout/routes').then(routes => routes.checkoutRoutes)},
     {path: 'account', loadChildren: () => import('./features/account/routes').then(routes => routes.accountRoutes)},
     // {path: 'account/login', component: LoginComponent},
     // {path: 'account/register', component: RegisterComponent},
